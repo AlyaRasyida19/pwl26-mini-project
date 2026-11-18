@@ -1,0 +1,33 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Book {
+  id          Int      @id @default(autoincrement())
+  title       String
+  author      String
+  isbn        String   @unique
+  year        Int
+  price       Float
+  stock       Int
+  publishedAt DateTime @db.Date
+  createdAt   DateTime @default(now())
+
+  loans       Loan[]
+}
+
+model Loan {
+  id           Int      @id @default(autoincrement())
+  bookId       Int
+  borrowerName String
+  quantity     Int
+  loanDate     DateTime @default(now())
+
+  book         Book     @relation(fields: [bookId], references: [id])
+}
